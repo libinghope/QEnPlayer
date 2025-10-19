@@ -11,84 +11,153 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>EnPlayer - 智能视频播放器</string>
+   <string>EnPlayer - 语音识别</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QWidget" name="videoWidget" native="true"/>
+     <widget class="QLabel" name="welcomeLabel">
+      <property name="text">
+       <string>欢迎使用 EnPlayer 语音识别</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+     </widget>
     </item>
     <item>
-     <widget class="QTextEdit" name="subtitleTextEdit">
-      <property name="readOnly">
-       <bool>true</bool>
+     <widget class="QGroupBox" name="inputGroupBox">
+      <property name="title">
+       <string>输入设置</string>
       </property>
-      <property name="placeholderText">
-       <string>正在生成字幕...</string>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="currentFileLabel">
+         <property name="text">
+          <string>当前文件: 未选择</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QPushButton" name="openButton">
+           <property name="text">
+            <string>选择视频/音频文件</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="startRecognitionButton">
+           <property name="text">
+            <string>开始语音识别</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="statusGroupBox">
+      <property name="title">
+       <string>识别状态</string>
       </property>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QProgressBar" name="recognitionProgressBar">
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="textVisible">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="statusLabel">
+         <property name="text">
+          <string>准备就绪</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="goToPlaybackButton">
+      <property name="text">
+       <string>前往音频播放界面</string>
+      </property>
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
       <property name="maximumHeight">
-       <number>100</number>
+       <number>300</number>
       </property>
+      <widget class="QWidget" name="subtitleTab">
+       <attribute name="title">
+        <string>识别结果</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QTextEdit" name="subtitleTextEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="placeholderText">
+           <string>识别结果将显示在这里...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="logTab">
+       <attribute name="title">
+        <string>日志</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QTextEdit" name="logTextEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="placeholderText">
+           <string>系统日志将显示在这里...</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>Monaco</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="clearLogButton">
+          <property name="text">
+           <string>清除日志</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
-    </item>
-    <item>
-     <widget class="QSlider" name="positionSlider">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QPushButton" name="openButton">
-        <property name="text">
-         <string>打开文件</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="playButton">
-        <property name="text">
-         <string>播放</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pauseButton">
-        <property name="text">
-         <string>暂停</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="stopButton">
-        <property name="text">
-         <string>停止</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="timeLabel">
-        <property name="text">
-         <string>00:00 / 00:00</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </item>
    </layout>
   </widget>

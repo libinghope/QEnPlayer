@@ -101,6 +101,11 @@ public:
     void setSubtitleSaveDirectory(const QString &directory);
     
     /**
+     * @brief 重置所有设置为默认值
+     */
+    void resetToDefaults();
+    
+    /**
      * @brief 保存所有设置
      */
     void saveSettings();
@@ -109,11 +114,6 @@ public:
      * @brief 加载所有设置
      */
     void loadSettings();
-    
-    /**
-     * @brief 重置为默认设置
-     */
-    void resetToDefaults();
 
 signals:
     /**

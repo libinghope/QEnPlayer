@@ -81,9 +81,9 @@ void SettingsDialog::on_browseWhisperPathButton_clicked()
 {
     QString path = QFileDialog::getOpenFileName(
         this,
-        tr("选择Whisper可执行文件"),
+        tr("选择Whisper模型文件"),
         QString(),
-        tr("可执行文件 (*);;所有文件 (*.*)")
+        tr("Whisper模型文件 (*.bin *.pt *.en.pt *.ggml *.ggmlv3);;所有文件 (*.*)")
     );
     
     if (!path.isEmpty()) {
@@ -106,17 +106,19 @@ void SettingsDialog::on_browseSubtitleDirButton_clicked()
 
 void SettingsDialog::on_downloadModelButton_clicked()
 {
-    // 简单的模型下载提示
+    // 模型下载提示，提供更多信息
     QString modelSize = ui->modelSizeComboBox->currentText();
     QMessageBox::information(
         this,
         tr("模型下载"),
-        tr("请访问Whisper官方GitHub仓库下载%1模型:\nhttps://github.com/openai/whisper").arg(modelSize),
+        tr("您可以通过以下方式下载Whisper %1模型：\n\n").arg(modelSize) +
+        tr("1. 使用whisper目录下的脚本：\n") +
+        tr("   cd whisper && ./models/download-ggml-model.sh %1\n\n").arg(modelSize) +
+        tr("2. 或者访问Whisper官方仓库手动下载：\n") +
+        tr("   https://github.com/ggerganov/whisper.cpp/tree/master/models\n\n") +
+        tr("下载完成后，在此对话框中选择模型文件(.bin格式)"),
         QMessageBox::Ok
     );
-    
-    // 在实际应用中，可以实现自动下载功能
-    // 这里只是一个示例，实际下载需要实现复杂的网络请求和进度显示
 }
 
 void SettingsDialog::on_applyButton_clicked()

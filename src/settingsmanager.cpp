@@ -182,7 +182,21 @@ void SettingsManager::loadSettings()
     }
     
     m_settings->beginGroup("Whisper");
-    m_whisperPath = m_settings->value("Path", "").toString();
+    // 直接加载模型文件路径
+    QString path = m_settings->value("Path", "").toString();
+    // 检查是否是有效的模型文件路径
+    if (!path.isEmpty() && QFile::exists(path)) {
+        // 验证是否是支持的模型文件扩展名
+        if (path.endsWith(".pt") || path.endsWith(".en.pt") || path.endsWith(".bin") || path.endsWith(".ggml") || path.endsWith(".ggmlv3")) {
+            qDebug() << "Using Whisper model path from settings:" << path;
+        } else {
+            qWarning() << "Warning: Whisper path may not be a valid model file:" << path;
+        }
+    } else if (!path.isEmpty()) {
+        qWarning() << "Warning: Whisper model file not found at:" << path;
+    }
+    m_whisperPath = path;
+    
     m_whisperModelSize = m_settings->value("ModelSize", "small").toString();
     m_recognitionLanguage = m_settings->value("Language", "auto").toString();
     m_preferOnlineAPI = m_settings->value("PreferOnlineAPI", false).toBool();

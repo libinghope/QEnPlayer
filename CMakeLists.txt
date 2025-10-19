@@ -11,6 +11,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# 添加whisper.cpp子项目
+add_subdirectory(whisper)
+
+# 设置whisper.cpp编译选项
+set(WHISPER_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(WHISPER_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
 # Check http://doc.qt.io/qt-5/deployment-android.html for more information.
 # They need to be set before the find_package(Qt5 ...) call.
@@ -33,12 +40,15 @@ if(ANDROID)
     src/speechrecognizer.cpp
     src/settingsmanager.cpp
     src/settingsdialog.cpp
+    src/playbackwindow.cpp
     src/mainwindow.h
     src/speechrecognizer.h
     include/settingsmanager.h
     include/settingsdialog.h
+    include/playbackwindow.h
     forms/mainwindow.ui
     forms/settingsdialog.ui
+    forms/playbackwindow.ui
   )
 else()
   add_executable(EnPlayer
@@ -47,15 +57,18 @@ else()
     src/speechrecognizer.cpp
     src/settingsmanager.cpp
     src/settingsdialog.cpp
+    src/playbackwindow.cpp
     include/mainwindow.h
     include/speechrecognizer.h
     include/settingsmanager.h
     include/settingsdialog.h
+    include/playbackwindow.h
     forms/mainwindow.ui
     forms/settingsdialog.ui
+    forms/playbackwindow.ui
   )
 endif()
 
 target_include_directories(EnPlayer PRIVATE include)
 
-target_link_libraries(EnPlayer PRIVATE Qt5::Widgets Qt5::Multimedia Qt5::MultimediaWidgets Qt5::Network)
+target_link_libraries(EnPlayer PRIVATE Qt5::Widgets Qt5::Multimedia Qt5::MultimediaWidgets Qt5::Network whisper)

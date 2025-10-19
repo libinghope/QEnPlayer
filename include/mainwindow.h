@@ -2,9 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QMediaPlayer>
-#include <QVideoWidget>
-#include <QFileDialog>
 #include <QTimer>
 #include <QString>
 #include <QProcess>
@@ -17,6 +14,7 @@
 #include "speechrecognizer.h"
 #include "settingsmanager.h"
 #include "settingsdialog.h"
+#include "playbackwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -32,8 +30,7 @@ public:
 
 private slots:
     void on_openButton_clicked();
-    void on_playButton_clicked();
-    void on_positionSlider_sliderMoved(int position);
+    void on_startRecognitionButton_clicked();
     
     // 自定义槽函数
     void processAudioForSubtitles();
@@ -46,26 +43,37 @@ private slots:
     
     // 设置相关槽函数
     void on_actionSettings_triggered();
+    void onSettingsChanged(); // 新增：处理设置变更的槽函数
     
-    // 媒体播放器相关槽函数
-    void on_positionChanged(qint64 position);
-    void on_durationChanged(qint64 duration);
-    void on_stateChanged(QMediaPlayer::State state);
-    void on_volumeSlider_valueChanged(int value);
-    void on_playbackSpeedComboBox_currentIndexChanged(int index);
-    void generateSampleSubtitle();
+    // 日志相关槽函数
+    void on_clearLogButton_clicked();
     
+    // 跳转到播放界面
+    void on_goToPlaybackButton_clicked();
+    
+    // 从播放界面返回
+    void onPlaybackWindowClosed();
+
 private:
     Ui::MainWindow *ui;
-    QMediaPlayer *player;
-    QVideoWidget *videoWidget;
     QTimer *subtitleTimer;
     SpeechRecognizer *m_speechRecognizer; // 语音识别器
-    QString currentAudioFile;      // 当前处理的视频文件路径
+    QString currentAudioFile;             // 当前处理的视频文件路径
+    QString currentSubtitle;              // 当前识别的字幕内容
+    bool isRecognitionInProgress;         // 标记识别任务是否正在进行中
+    PlaybackWindow *playbackWindow;       // 播放窗口指针
     
-    void initPlayer();
     void initSubtitleTimer();
     void initSpeechRecognition();
-    QString formatTime(qint64 milliseconds);
+    
+    // FFmpeg可用性检查方法
+    void checkFfmpegAvailability();
+    
+    // 显示识别完成提示并引导用户跳转
+    void showRecognitionCompletePrompt();
+    
+public:
+    // 日志相关方法 - 允许外部访问日志功能
+    void logMessage(const QString &message, const QString &level = "INFO");
 };
 #endif // MAINWINDOW_H

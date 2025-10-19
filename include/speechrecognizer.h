@@ -9,6 +9,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QThread>
+#include "whisper.h"
 
 /**
  * @brief 语音识别器类
@@ -159,16 +161,38 @@ private:
      */
     void cleanup();
     
+    /**
+     * @brief 加载音频文件到内存
+     * @param audioFilePath 音频文件路径
+     * @param samples 输出的音频样本
+     * @param sampleRate 输出的采样率
+     * @return 是否加载成功
+     */
+    bool loadAudioFile(const QString &audioFilePath, std::vector<float> &samples, int &sampleRate);
+    
+    /**
+     * @brief 异步执行语音识别的方法
+     */
+    void recognizeAudioAsync();
+    
     // 成员变量
-    QProcess *m_whisperProcess;              ///< Whisper进程
+    QProcess *m_whisperProcess;              ///< 旧的Whisper进程（用于兼容）
     QNetworkAccessManager *m_networkManager; ///< 网络访问管理器
-    QString m_whisperPath;                   ///< Whisper可执行文件路径
+    QString m_whisperPath;                   ///< Whisper模型文件路径
     QString m_language;                      ///< 识别语言
     QString m_modelSize;                     ///< 模型大小
     QString m_apiUrl;                        ///< 在线API地址
     bool m_preferOnlineAPI;                  ///< 是否优先使用在线API
     QString m_currentAudioFile;              ///< 当前处理的音频文件
     QString m_tempAudioFile;                 ///< 临时音频文件（如果使用）
+    
+    // whisper.cpp相关成员
+    whisper_context *m_whisperCtx;           ///< Whisper上下文
+    QThread *m_recognitionThread;            ///< 识别线程
+    bool m_isRecognizing;                    ///< 是否正在识别
+    std::vector<float> m_audioSamples;       ///< 音频样本数据
+    int m_audioSampleRate;                   ///< 音频采样率
+    bool m_shouldStop;                       ///< 是否应该停止识别
 };
 
 #endif // SPEECHRECOGNIZER_H
